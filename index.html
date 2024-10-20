@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html lang="ar">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Points Page</title>
+    <!-- إضافة مكتبة Font Awesome للأيقونات -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            text-align: center;
+            background: linear-gradient(145deg, #1a1a1a, #0d0d0d);
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            height: 100vh;
+            color: white;
+        }
+        .logo-container {
+            margin-top: 50px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        .logo {
+            width: 200px;
+            height: 200px;
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.4);
+        }
+        .logo img {
+            width: 90%;
+            border-radius: 50%;
+        }
+        .points {
+            font-size: 56px;
+            margin: 20px 0;
+        }
+        .button-container {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+        .button {
+            background-color: #0088cc;
+            color: white;
+            padding: 15px;
+            font-size: 20px;
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+            width: 80%;
+            max-width: 300px;
+            margin: 0 auto;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.4);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 10px;
+            text-decoration: none;
+        }
+        .button i {
+            font-size: 24px;
+        }
+        .button:hover {
+            background-color: #0077b3;
+        }
+        footer {
+            background-color: #333;
+            color: white;
+            display: flex;
+            justify-content: space-around;
+            padding: 10px 0;
+        }
+        footer a {
+            color: white;
+            text-decoration: none;
+            font-size: 18px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 5px;
+        }
+        footer a i {
+            font-size: 24px;
+        }
+        footer a:hover {
+            text-decoration: underline;
+        }
+        .welcome-popup {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background-color: #333;
+            color: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.5);
+            text-align: center;
+            z-index: 1000;
+            display: none;
+        }
+        .welcome-popup h2 {
+            margin-bottom: 10px;
+        }
+        .welcome-popup button {
+            background-color: #0088cc;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        .welcome-popup button:hover {
+            background-color: #0077b3;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="logo-container">
+        <div class="logo">
+            <img src="https://i.suar.me/2GLP4/l" alt="Logo">
+        </div>
+    </div>
+
+    <div class="points" id="pointsDisplay">
+        0
+    </div>
+
+    <div class="button-container">
+        <a href="link-to-withdraw-page" class="button">
+            <i class="fas fa-wallet"></i> Withdraw to wallet
+        </a>
+        <a href="link-to-boost-page" class="button">
+            <i class="fas fa-bolt"></i> Boost your score
+        </a>
+    </div>
+
+    <footer>
+        <a href="#">
+            <i class="fas fa-home"></i>
+            <span>Home</span>
+        </a>
+        <a href="#">
+            <i class="fas fa-gamepad"></i>
+            <span>Games</span>
+        </a>
+        <a href="#">
+            <i class="fas fa-tasks"></i>
+            <span>Tasks</span>
+        </a>
+        <a href="#">
+            <i class="fas fa-users"></i>
+            <span>Friends</span>
+        </a>
+    </footer>
+
+    <div class="welcome-popup" id="welcomePopup">
+        <h2>Welcome, <span id="usernameDisplay"></span>!</h2>
+        <p>You have been credited with 20,000 points. Enjoy your journey with us!</p>
+        <button onclick="closePopup()">Get Started</button>
+    </div>
+
+    <!-- إضافة مكتبة Telegram Web Apps -->
+    <script src="https://telegram.org/js/telegram-web-app.js"></script>
+
+    <script>
+        const pointsDisplay = document.getElementById('pointsDisplay');
+        let points = localStorage.getItem('points') ? parseInt(localStorage.getItem('points')) : 0;
+
+        if (points === 0) {
+            points = 20000; // نقاط أول دخول
+            localStorage.setItem('points', points);
+        }
+
+        // عرض النقاط مع إضافة الفاصلة للأرقام الكبيرة
+        pointsDisplay.textContent = points.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+
+        // تهيئة Telegram Web Apps
+        const tg = window.Telegram.WebApp;
+
+        // جلب اسم المستخدم من تلجرام
+        let username = tg.initDataUnsafe?.user?.username || 'Guest';
+
+        // حفظ اسم المستخدم في localStorage
+        localStorage.setItem('username', username);
+
+        // عرض اسم المستخدم في نافذة الترحيب
+        document.getElementById('usernameDisplay').textContent = username;
+
+        // إظهار نافذة الترحيب
+        const welcomePopup = document.getElementById('welcomePopup');
+        welcomePopup.style.display = 'block';
+
+        // دالة إغلاق نافذة الترحيب
+        function closePopup() {
+            welcomePopup.style.display = 'none';
+        }
+    </script>
+
+</body>
+</html>
