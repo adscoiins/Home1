@@ -180,6 +180,9 @@
         if (points === 0) {
             points = 20000; // نقاط أول دخول
             localStorage.setItem('points', points);
+            // إظهار نافذة الترحيب
+            const welcomePopup = document.getElementById('welcomePopup');
+            welcomePopup.style.display = 'block';
         }
 
         // عرض النقاط مع إضافة الفاصلة للأرقام الكبيرة
@@ -197,13 +200,9 @@
         // عرض اسم المستخدم في نافذة الترحيب
         document.getElementById('usernameDisplay').textContent = username;
 
-        // إظهار نافذة الترحيب
-        const welcomePopup = document.getElementById('welcomePopup');
-        welcomePopup.style.display = 'block';
-
         // دالة إغلاق نافذة الترحيب
         function closePopup() {
-            welcomePopup.style.display = 'none';
+            document.getElementById('welcomePopup').style.display = 'none';
         }
     </script>
 
