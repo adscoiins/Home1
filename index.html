@@ -176,42 +176,40 @@
         <button onclick="closePopup()">Get Started</button>
     </div>
 
-    <script src="https://www.gstatic.com/firebasejs/9.1.3/firebase-app.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/9.1.3/firebase-database.js"></script>
-
+    <script src="https://cdn.jsdelivr.net/npm/mongodb-stitch-browser-sdk/dist/stitch.js"></script>
     <script>
-        const firebaseConfig = {
-            apiKey: "YOUR_API_KEY",
-            authDomain: "YOUR_AUTH_DOMAIN",
-            databaseURL: "YOUR_DATABASE_URL",
-            projectId: "YOUR_PROJECT_ID",
-            storageBucket: "YOUR_STORAGE_BUCKET",
-            messagingSenderId: "YOUR_MESSAGING_SENDER_ID",
-            appId: "YOUR_APP_ID"
-        };
+        const app = stitch.Stitch.initializeDefaultAppClient('YOUR_APP_ID');
 
-        // Initialize Firebase
-        const app = firebase.initializeApp(firebaseConfig);
-        const database = firebase.database();
+        async function getUserPoints(userId) {
+            const mongodb = app.getServiceClient(stitch.RemoteMongoClient.factory, 'mongodb-atlas');
+            const db = mongodb.db('YOUR_DATABASE_NAME');
+            const usersCollection = db.collection('users');
+
+            const user = await usersCollection.findOne({ _id: userId });
+            return user ? user.points : 20000; // نقاط أول دخول
+        }
+
+        async function saveUserPoints(userId, points) {
+            const mongodb = app.getServiceClient(stitch.RemoteMongoClient.factory, 'mongodb-atlas');
+            const db = mongodb.db('YOUR_DATABASE_NAME');
+            const usersCollection = db.collection('users');
+
+            await usersCollection.updateOne({ _id: userId }, { $set: { points: points } });
+        }
 
         const pointsDisplay = document.getElementById('pointsDisplay');
         let userId = localStorage.getItem('userId');
 
         if (!userId) {
-            userId = Date.now().toString(); // إنشاء معرّف مستخدم فريد
+            userId = new Date().getTime().toString(); // إنشاء معرّف مستخدم فريد
             localStorage.setItem('userId', userId);
-            database.ref('users/' + userId).set({
-                points: 20000 // نقاط أول دخول
-            });
+            saveUserPoints(userId, 20000); // حفظ النقاط لأول دخول
             showWelcomePopup();
         }
 
         // جلب النقاط من قاعدة البيانات
-        database.ref('users/' + userId).on('value', (snapshot) => {
-            const data = snapshot.val();
-            if (data && data.points) {
-                pointsDisplay.textContent = data.points.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
-            }
+        getUserPoints(userId).then(points => {
+            pointsDisplay.textContent = points.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
         });
 
         function showWelcomePopup() {
