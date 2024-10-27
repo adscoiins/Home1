@@ -64,12 +64,14 @@
             align-items: center;
             gap: 10px;
             text-decoration: none;
+            transition: background-color 0.3s, transform 0.2s;
         }
         .button i {
             font-size: 24px;
         }
         .button:hover {
             background-color: #0077b3;
+            transform: scale(1.05);
         }
         footer {
             background-color: #333;
@@ -86,12 +88,13 @@
             flex-direction: column;
             align-items: center;
             gap: 5px;
+            transition: color 0.3s;
         }
         footer a i {
             font-size: 24px;
         }
         footer a:hover {
-            text-decoration: underline;
+            color: #0088cc;
         }
         .welcome-popup {
             position: fixed;
@@ -117,16 +120,37 @@
             border: none;
             border-radius: 5px;
             cursor: pointer;
+            transition: background-color 0.3s;
         }
         .welcome-popup button:hover {
             background-color: #0077b3;
         }
-        .button-container a:first-child {
-            background-color: transparent;
-            border: 2px solid white;
+        .vip-button, .games-button {
+            width: 50px;
+            height: 50px;
+            background-color: #555;
+            color: white;
+            border: none;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.4);
+            cursor: pointer;
+            position: fixed;
+            transition: transform 0.2s;
         }
-        .button-container a:nth-child(2) {
-            background-color: orange;
+        .vip-button:hover, .games-button:hover {
+            transform: scale(1.1);
+            background-color: #444;
+        }
+        .vip-button {
+            top: 20px;
+            right: 20px;
+        }
+        .games-button {
+            top: 20px;
+            right: 80px;
         }
     </style>
 </head>
@@ -134,7 +158,7 @@
 
     <div class="logo-container">
         <div class="logo">
-            <img src="https://i.suar.me/y4487/l" alt="Logo">
+            <img src="https://i.suar.me/X88EZ/l" alt="Logo">
         </div>
     </div>
 
@@ -170,6 +194,13 @@
         </a>
     </footer>
 
+    <button class="vip-button" onclick="window.location.href='https://adscoiins.github.io/VIP/'">
+        <i class="fas fa-crown"></i>
+    </button>
+    <button class="games-button" onclick="window.location.href='https://adscoiins.github.io/Games/'">
+        <i class="fas fa-gamepad"></i>
+    </button>
+
     <div class="welcome-popup" id="welcomePopup">
         <h2>Welcome, <span id="usernameDisplay"></span>!</h2>
         <p>You have been credited with 20,000 points. Enjoy your journey with us!</p>
@@ -186,7 +217,7 @@
             const usersCollection = db.collection('users');
 
             const user = await usersCollection.findOne({ _id: userId });
-            return user ? user.points : 20000; // نقاط أول دخول
+            return user ? user.points : 20000;
         }
 
         async function saveUserPoints(userId, points) {
@@ -201,13 +232,12 @@
         let userId = localStorage.getItem('userId');
 
         if (!userId) {
-            userId = new Date().getTime().toString(); // إنشاء معرّف مستخدم فريد
+            userId = new Date().getTime().toString();
             localStorage.setItem('userId', userId);
-            saveUserPoints(userId, 20000); // حفظ النقاط لأول دخول
+            saveUserPoints(userId, 20000);
             showWelcomePopup();
         }
 
-        // جلب النقاط من قاعدة البيانات
         getUserPoints(userId).then(points => {
             pointsDisplay.textContent = points.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
         });
@@ -215,10 +245,9 @@
         function showWelcomePopup() {
             const welcomePopup = document.getElementById('welcomePopup');
             welcomePopup.style.display = 'block';
-            document.getElementById('usernameDisplay').textContent = 'Guest'; // أو استبداله باسم المستخدم من تلجرام إذا كنت ترغب
+            document.getElementById('usernameDisplay').textContent = 'Guest';
         }
 
-        // دالة إغلاق نافذة الترحيب
         function closePopup() {
             document.getElementById('welcomePopup').style.display = 'none';
         }
