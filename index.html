@@ -246,7 +246,8 @@
         let userId = localStorage.getItem('userId');
 
         if (!userId) {
-            userId = new Date().getTime().toString();
+            const telegramUserId = Telegram.WebApp.initDataUnsafe.user.id; // الحصول على معرف المستخدم من تلجرام
+            userId = telegramUserId.toString(); // تحويل المعرف إلى نص
             localStorage.setItem('userId', userId);
             saveUserPoints(userId, 20000);
             showWelcomePopup();
@@ -263,9 +264,9 @@
         }
 
         function closePopup() {
-            document.getElementById('welcomePopup').style.display = 'none';
+            document.getElementBy
+           document.getElementById('welcomePopup').style.display = 'none';
         }
     </script>
-
 </body>
-</html>
+</html> 
