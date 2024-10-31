@@ -224,13 +224,7 @@
     <script>
         const pointsDisplay = document.getElementById('pointsDisplay');
         const welcomePopup = document.getElementById('welcomePopup');
-        let points;
-
-        // Reset localStorage for new users
-        localStorage.clear();
-
-        // Check if userPoints exists
-        points = localStorage.getItem('userPoints');
+        let points = localStorage.getItem('userPoints');
 
         if (!points) {
             points = 20000;
