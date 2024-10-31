@@ -195,7 +195,7 @@
             <span>Home</span>
         </a>
         <a href="https://adscoiins.github.io/Game-soon/">
-            <i class="fas fa-gamepad"></i> <!-- إعادة الأيقونة الأصلية للألعاب -->
+            <i class="fas fa-gamepad"></i>
             <span>Games</span>
         </a>
         <a href="https://adscoiins.github.io/Tasks/">
@@ -226,6 +226,17 @@
         const welcomePopup = document.getElementById('welcomePopup');
         let points = localStorage.getItem('userPoints');
 
+        // Function to add points from different tasks
+        function addPoints(taskPoints, gamePoints, friendPoints) {
+            const totalPoints = parseInt(taskPoints) + parseInt(gamePoints) + parseInt(friendPoints);
+            points += totalPoints;
+            localStorage.setItem('userPoints', points);
+            updatePointsDisplay();
+        }
+
+        // Example usage: adding points from Tasks, Games, and Friends
+        addPoints(100, 200, 150); // Change the values as needed
+
         if (!points) {
             points = 20000;
             localStorage.setItem('userPoints', points);
@@ -234,7 +245,11 @@
             points = parseInt(points);
         }
 
-        pointsDisplay.textContent = points.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+        function updatePointsDisplay() {
+            pointsDisplay.textContent = points.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+        }
+
+        updatePointsDisplay();
 
         function showWelcomePopup() {
             welcomePopup.style.display = 'block';
