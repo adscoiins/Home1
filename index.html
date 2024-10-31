@@ -110,35 +110,6 @@
         footer a:hover {
             color: #0088cc;
         }
-        .welcome-popup {
-            position: fixed;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            background-color: #333;
-            color: white;
-            padding: 20px;
-            border-radius: 10px;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.5);
-            text-align: center;
-            z-index: 1000;
-            display: none;
-        }
-        .welcome-popup h2 {
-            margin-bottom: 10px;
-        }
-        .welcome-popup button {
-            background-color: #0088cc;
-            color: white;
-            padding: 10px 20px;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-            transition: background-color 0.3s;
-        }
-        .welcome-popup button:hover {
-            background-color: #0077b3;
-        }
         .vip-button, .games-button {
             width: 50px;
             height: 50px;
@@ -169,16 +140,13 @@
     </style>
 </head>
 <body>
-
     <div class="logo-container">
         <div class="logo">
             <img src="https://i.suar.me/2GWGQ/l" alt="Logo">
         </div>
     </div>
 
-    <div class="points" id="pointsDisplay">
-        0
-    </div>
+    <div class="points" id="pointsDisplay">0</div>
 
     <div class="button-container">
         <a href="https://adscoiins.github.io/Withdraw/" class="button withdraw">
@@ -208,60 +176,26 @@
         </a>
     </footer>
 
-    <button class="vip-button" onclick="window.location.href='https://adscoiins.github.io/VIP/'">
+    <a href="https://adscoiins.github.io/VIP/" class="vip-button">
         <i class="fas fa-crown"></i>
-    </button>
-    <button class="games-button" onclick="window.location.href='https://adscoiins.github.io/Game-soon/'">
+    </a>
+    <a href="https://adscoiins.github.io/Game-soon/" class="games-button">
         <i class="fas fa-trophy"></i>
-    </button>
-
-    <div class="welcome-popup" id="welcomePopup">
-        <h2>Welcome, <span id="usernameDisplay"></span>!</h2>
-        <p>You have been credited with 20,000 points. Enjoy your journey with us!</p>
-        <button onclick="closePopup()">Get Started</button>
-    </div>
+    </a>
 
     <script>
-        const pointsDisplay = document.getElementById('pointsDisplay');
-        const welcomePopup = document.getElementById('welcomePopup');
         let points = localStorage.getItem('userPoints');
-
         if (!points) {
-            points = 20000;
+            points = 20000; // النقاط الابتدائية
             localStorage.setItem('userPoints', points);
-            showWelcomePopup();
         } else {
-            points = parseInt(points);
+            points = parseInt(points) + parseInt(localStorage.getItem('tasksPoints') || 0) +
+                parseInt(localStorage.getItem('gamesPoints') || 0) +
+                parseInt(localStorage.getItem('friendsPoints') || 0) +
+                parseInt(localStorage.getItem('boostPoints') || 0);
         }
-
-        function addPoints(taskPoints = 0, gamePoints = 0, friendPoints = 0, boostPoints = 0) {
-            const totalPoints = parseInt(taskPoints) + parseInt(gamePoints) + parseInt(friendPoints) + parseInt(boostPoints);
-            points += totalPoints;
-            localStorage.setItem('userPoints', points);
-            updatePointsDisplay();
-        }
-
-        function formatPoints(value) {
-            if (value >= 1000000) {
-                return (value / 1000000).toFixed(1) + 'M';
-            }
-            return value.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
-        }
-
-        function updatePointsDisplay() {
-            pointsDisplay.textContent = formatPoints(points);
-        }
-
-        updatePointsDisplay();
-
-        function showWelcomePopup() {
-            welcomePopup.style.display = 'block';
-            document.getElementById('usernameDisplay').textContent = 'Guest';
-        }
-
-        function closePopup() {
-            welcomePopup.style.display = 'none';
-        }
+        document.getElementById('pointsDisplay').textContent = points;
+        localStorage.setItem('userPoints', points);
     </script>
 </body>
 </html>
