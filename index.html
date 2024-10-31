@@ -221,52 +221,29 @@
         <button onclick="closePopup()">Get Started</button>
     </div>
 
-    <script src="https://cdn.jsdelivr.net/npm/mongodb-stitch-browser-sdk/dist/stitch.js"></script>
     <script>
-        const app = stitch.Stitch.initializeDefaultAppClient('YOUR_APP_ID');
-
-        async function getUserPoints(userId) {
-            const mongodb = app.getServiceClient(stitch.RemoteMongoClient.factory, 'mongodb-atlas');
-            const db = mongodb.db('YOUR_DATABASE_NAME');
-            const usersCollection = db.collection('users');
-
-            const user = await usersCollection.findOne({ _id: userId });
-            return user ? user.points : 20000;
-        }
-
-        async function saveUserPoints(userId, points) {
-            const mongodb = app.getServiceClient(stitch.RemoteMongoClient.factory, 'mongodb-atlas');
-            const db = mongodb.db('YOUR_DATABASE_NAME');
-            const usersCollection = db.collection('users');
-
-            await usersCollection.updateOne({ _id: userId }, { $set: { points: points } });
-        }
-
         const pointsDisplay = document.getElementById('pointsDisplay');
-        let userId = localStorage.getItem('userId');
+        const welcomePopup = document.getElementById('welcomePopup');
+        let points = localStorage.getItem('userPoints');
 
-        if (!userId) {
-            const telegramUserId = Telegram.WebApp.initDataUnsafe.user.id; // الحصول على معرف المستخدم من تلجرام
-            userId = telegramUserId.toString(); // تحويل المعرف إلى نص
-            localStorage.setItem('userId', userId);
-            saveUserPoints(userId, 20000);
+        if (!points) {
+            points = 20000;
+            localStorage.setItem('userPoints', points);
             showWelcomePopup();
+        } else {
+            points = parseInt(points);
         }
 
-        getUserPoints(userId).then(points => {
-            pointsDisplay.textContent = points.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
-        });
+        pointsDisplay.textContent = points.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
 
         function showWelcomePopup() {
-            const welcomePopup = document.getElementById('welcomePopup');
             welcomePopup.style.display = 'block';
             document.getElementById('usernameDisplay').textContent = 'Guest';
         }
 
         function closePopup() {
-            document.getElementBy
-           document.getElementById('welcomePopup').style.display = 'none';
+            welcomePopup.style.display = 'none';
         }
     </script>
 </body>
-</html> 
+</html>
