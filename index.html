@@ -224,7 +224,13 @@
     <script>
         const pointsDisplay = document.getElementById('pointsDisplay');
         const welcomePopup = document.getElementById('welcomePopup');
-        let points = localStorage.getItem('userPoints');
+        let points;
+
+        // Reset localStorage for new users
+        localStorage.clear();
+
+        // Check if userPoints exists
+        points = localStorage.getItem('userPoints');
 
         if (!points) {
             points = 20000;
@@ -240,9 +246,6 @@
             localStorage.setItem('userPoints', points);
             updatePointsDisplay();
         }
-
-        // Example usage: adding points from Tasks, Games, Friends, and Boost
-        // addPoints(100, 200, 150, 50); // Change the values as needed
 
         function formatPoints(value) {
             if (value >= 1000000) {
