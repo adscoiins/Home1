@@ -244,8 +244,15 @@
         // Example usage: adding points from Tasks, Games, Friends, and Boost
         // addPoints(100, 200, 150, 50); // Change the values as needed
 
+        function formatPoints(value) {
+            if (value >= 1000000) {
+                return (value / 1000000).toFixed(1) + 'M'; // e.g., 1.0M
+            }
+            return value.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ","); // Format with commas
+        }
+
         function updatePointsDisplay() {
-            pointsDisplay.textContent = points.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+            pointsDisplay.textContent = formatPoints(points);
         }
 
         updatePointsDisplay();
