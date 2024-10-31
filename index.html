@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="ar">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -226,17 +226,6 @@
         const welcomePopup = document.getElementById('welcomePopup');
         let points = localStorage.getItem('userPoints');
 
-        // Function to add points from different tasks
-        function addPoints(taskPoints, gamePoints, friendPoints) {
-            const totalPoints = parseInt(taskPoints) + parseInt(gamePoints) + parseInt(friendPoints);
-            points += totalPoints;
-            localStorage.setItem('userPoints', points);
-            updatePointsDisplay();
-        }
-
-        // Example usage: adding points from Tasks, Games, and Friends
-        addPoints(100, 200, 150); // Change the values as needed
-
         if (!points) {
             points = 20000;
             localStorage.setItem('userPoints', points);
@@ -244,6 +233,16 @@
         } else {
             points = parseInt(points);
         }
+
+        function addPoints(taskPoints, gamePoints, friendPoints, boostPoints) {
+            const totalPoints = parseInt(taskPoints) + parseInt(gamePoints) + parseInt(friendPoints) + parseInt(boostPoints);
+            points += totalPoints;
+            localStorage.setItem('userPoints', points);
+            updatePointsDisplay();
+        }
+
+        // Example usage: adding points from Tasks, Games, Friends, and Boost
+        // addPoints(100, 200, 150, 50); // Change the values as needed
 
         function updatePointsDisplay() {
             pointsDisplay.textContent = points.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
