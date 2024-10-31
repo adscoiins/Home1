@@ -234,7 +234,7 @@
             points = parseInt(points);
         }
 
-        function addPoints(taskPoints, gamePoints, friendPoints, boostPoints) {
+        function addPoints(taskPoints = 0, gamePoints = 0, friendPoints = 0, boostPoints = 0) {
             const totalPoints = parseInt(taskPoints) + parseInt(gamePoints) + parseInt(friendPoints) + parseInt(boostPoints);
             points += totalPoints;
             localStorage.setItem('userPoints', points);
@@ -246,9 +246,9 @@
 
         function formatPoints(value) {
             if (value >= 1000000) {
-                return (value / 1000000).toFixed(1) + 'M'; // e.g., 1.0M
+                return (value / 1000000).toFixed(1) + 'M';
             }
-            return value.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ","); // Format with commas
+            return value.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
         }
 
         function updatePointsDisplay() {
