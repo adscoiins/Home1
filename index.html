@@ -11,7 +11,7 @@
             margin: 0;
             padding: 0;
             text-align: center;
-            background: linear-gradient(145deg, #1a1a1a, #0d0d0d);
+            background: linear-gradient(145deg, #0088cc, #006699);
             display: flex;
             flex-direction: column;
             justify-content: space-between;
@@ -75,14 +75,14 @@
         }
         .withdraw {
             background-color: transparent;
-            color: #0088cc;
-            border: 2px solid #0088cc;
+            color: white;
+            border: 2px solid white;
         }
         .withdraw:hover {
-            background-color: rgba(0, 136, 204, 0.1);
+            background-color: rgba(255, 255, 255, 0.1);
         }
         .boost {
-            background-color: orange;
+            color: white;
         }
         .boost:hover {
             background-color: darkorange;
@@ -186,7 +186,7 @@
     <script>
         let points = localStorage.getItem('userPoints');
         if (!points) {
-            points = 20000; // النقاط الابتدائية
+            points = 20000;
             localStorage.setItem('userPoints', points);
         } else {
             points = parseInt(points) + parseInt(localStorage.getItem('tasksPoints') || 0) +
